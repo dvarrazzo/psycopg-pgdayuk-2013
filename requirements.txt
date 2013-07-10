@@ -1,0 +1,5 @@
+landslide
+psycopg2
+gevent
+gevent-websocket
+psycogreen

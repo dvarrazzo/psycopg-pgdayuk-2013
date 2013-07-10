@@ -1,0 +1,16 @@
+table.data-types {
+  border: none;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 150%;
+  background-color: #eef;
+}
+
+table.data-types td {
+  padding: 0.15em;
+}
+
+table.data-types th {
+  padding: 0.15em;
+}

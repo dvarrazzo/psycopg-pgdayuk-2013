@@ -1,0 +1,8 @@
+Python is a programming language with a rich and easily extendible data model.
+PostgreSQL is a database with a rich and extendible data model too.  Psycopg,
+the de-facto standard PostgreSQL driver for Python, tries to bridge the two
+worlds seamlessly transforming Python objects into PostgreSQL types and back.
+As PostgreSQL becomes more and more types-rich (from composite and arrays to
+hstore, range, JSON...) Psycopg allows Python to easily benefit of such
+richness.  We'll take a look at Psycopg usage, customization and some juicy
+features useful both for quick hacks and for large-scale development.
