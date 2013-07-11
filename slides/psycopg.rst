@@ -782,7 +782,9 @@ Using gevent__, gevent-websocket__, psycogreen__
         window.onload = function() {
             ws = new WebSocket("ws://localhost:7000/data");
             ws.onopen = function() {
-                $('p.apology').hide()
+                $('p.apology').hide();
+                // drop the offline slide
+                $('#target').parents('.slide-wrapper').next().remove();
             }
             ws.onmessage = function(msg) {
                 bar = $('#' + msg.data);
