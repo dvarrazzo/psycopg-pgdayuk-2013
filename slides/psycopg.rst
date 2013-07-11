@@ -832,12 +832,18 @@ The future
 
   - Improvements to ``COPY``, ``hstore``...
 
-- Binary protocol
+- Binary protocol, prepared statements...
+
+----
+
+
+Update path
+===========
 
 - Optional in Psycopg 2.(*n*\+1), default in ``psycopg3``
 
-  - ``psycopg3`` would be a ``psycopg2`` wrapper with modern defauls (e.g.
-    Unicode everywhere)
+- ``psycopg3`` would be a ``psycopg2`` wrapper with modern defauls (e.g.
+  Unicode everywhere)
 
 - Sponsorship required
 
