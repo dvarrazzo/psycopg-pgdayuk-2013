@@ -10,7 +10,7 @@ Psycopg: Python for PostgreSQL users
 Do you know Python?
 ===================
 
-That funny little language where indentation matters
+That funny little language where white spaces matter
 
 ..
     Note to piro: you want
@@ -38,11 +38,11 @@ said this way, in uppercase.
 Python in the 10's
 ==================
 
-- PHP -> Python
+- Software development: PHP -> Python
 
   (path similar to MySQL -> PostgreSQL)
 
-- Perl -> Python
+- System development: Perl -> Python
 
 .. image:: img/1910_Waverley_Coupe.gif
     :width: 600px
@@ -76,6 +76,9 @@ Python and PostgreSQL
 - Both strongly typed
 
 - Both rich in data types
+
+- Both easily extendible
+
 
 Presenter notes
 ---------------
@@ -118,6 +121,10 @@ What is ``psycopg2``?
 
 - A database *driver*
 - *The most used* Python driver
+- `Good docs`__
+- Comprehensive test suite
+
+.. __: http://initd.org/psycopg/docs/
 
 Presenter notes
 ---------------
@@ -142,16 +149,18 @@ have in a closet at home).
 ----
 
 
-What is ``psycopg2``?
-=====================
+What is ``psycopg2`` made of?
+=============================
 
 - ``libpq`` wrapper
 
-- ``psycopg2`` implemented in C
+- Mostly implemented in C
+
+  (good for CPython - 95% of users (stat just made up))
 
 - A `pure Python implementation`__ exists
 
-  CPython, PyPy
+  (for CPython, PyPy. Maybe Jython, IronPython too?)
 
 .. __: https://pypi.python.org/pypi/psycopg2cffi
 
@@ -175,8 +184,8 @@ bug that gets a new test case in the next release).
 ----
 
 
-What is ``psycopg2``?
-=====================
+What does ``psycopg2`` look like?
+=================================
 
 Implements the `DBAPI 2.0`__
 
@@ -185,6 +194,9 @@ Implements the `DBAPI 2.0`__
 - Good: it's a standard
 
 - Bad: not the greatest standard
+
+- Main entry points: ``connect()`` function, ``connection``, ``cursor``
+  classes
 
 Presenter notes
 ---------------
@@ -198,78 +210,6 @@ model is desinged to follow that standard and a few quirky choices can be
 traced to that (autocommit, we'll see). Don't have much to say about that,
 except that the API is fully respected so it could be an extra box we can put
 a tick in.
-
-----
-
-
-The ``connection`` class
-========================
-
-``conn = psycopg2.connect(conninfo)``
-
-- wraps a database connection
-
-- allows transaction control
-
-Presenter notes
----------------
-
-Anyway, let's cut the babbling and get to the point: COOOODE!!!
-
-Psycopg revolves around two objects:
-
-- the connection
-- the cursor
-
-The connection wraps a PostgreSQL connection, so for instance the state to be
-"in transaction" or "in error" is the connection's.
-
-----
-
-
-The ``cursor`` class
-====================
-
-.. code-block:: python
-
-    cur = conn.cursor()
-
-- issues statements
-
-- holds a result
-
-Server-side__ cursors
-=====================
-
-.. code-block:: python
-
-    cur = cnn.cursor("some name")
-
-- Real PostgreSQL cursor (DECLARE__)
-
-- Incremental fetch from the server
-
-.. __: http://initd.org/psycopg/docs/usage.html#server-side-cursors
-.. __: http://www.postgresql.org/docs/current/static/sql-declare.html
-
-Presenter notes
----------------
-
-The cursors is normally not a PostgreSQL objects. Cursors represent you, your
-two small children and your cat all banging on a keyboard with a psql shell
-and want to execute a command: in order to respect everybody's sanity the
-operations on the same connection are serialized and, if a transaction is
-started, all the cursors work in the same transaction. Apart from that, what a
-cursor does is to keep a result. So it's cheap and easy to create two cursor
-and iterate on the first cursor's result to do operation with the second
-cursor, all in the same transaction.
-
-Normal cursors are purely client-side structures: the query result is
-transferred entirely from the server to the client before it is returned to
-Python. If this is undesirable it's possible to use "server-side cursors", the
-ones created by the PostgreSQL CURSOR statement.
-
-Same interface, slightly different life cycle (cannot be reused)
 
 ----
 
@@ -305,33 +245,76 @@ Example: basic usage
 ----
 
 
-Example: multiple cursors
-=========================
+The ``connection`` class
+========================
 
-.. code-block:: python
+``conn = psycopg2.connect(conninfo)``
 
-    def work(cnn):
-        cur = cnn.cursor()
+- Wraps a database connection
 
-        cur.execute(BIG_FAT_QUERY)
-        for r in cur:
-            if some_condition(r):
-                do_something(cnn, r)
+- Controls transactions
 
-        cnn.commit()
-
-    def do_something(cnn, r):
-        cur = cnn.cursor()
-        cur.execute(SOME_QUERY, args(r))
+- Creates ``cursor``\ s
 
 Presenter notes
 ---------------
 
-Typical function pattern: get a connection as argument, do your job in a
-separate cursor and don't commit it: the function can be composed with other
-functions and a single super-function can be responsible of committing. Any
-error in any function would roll-back all everything in the connection's
-transaction.
+Anyway, let's cut the babbling and get to the point: COOOODE!!!
+
+Psycopg revolves around two objects:
+
+- the connection
+- the cursor
+
+The connection wraps a PostgreSQL connection, so for instance the state to be
+"in transaction" or "in error" is the connection's.
+
+----
+
+
+The ``cursor`` class
+====================
+
+.. code-block:: python
+
+    cur = conn.cursor()
+
+- Issues statements
+
+- Holds a result
+
+Server-side__ cursors
+=====================
+
+.. code-block:: python
+
+    cur = cnn.cursor("some name")
+
+- Real PostgreSQL cursor (DECLARE__)
+
+- Incremental fetch from the server
+
+.. __: http://initd.org/psycopg/docs/usage.html#server-side-cursors
+.. __: http://www.postgresql.org/docs/current/static/sql-declare.html
+
+Presenter notes
+---------------
+
+The cursors is normally not a PostgreSQL objects. Cursors represent you, your
+two small children and your cat all banging on a keyboard with a psql shell
+and want to execute a command: in order to respect everybody's sanity the
+operations on the same connection are serialized and, if a transaction is
+started, all the cursors work in the same transaction. Apart from that, what a
+cursor does is to keep a result. So it's cheap and easy to create two cursor
+and iterate on the first cursor's result to do operation with the second
+cursor, all in the same transaction.
+
+Normal cursors are purely client-side structures: the query result is
+transferred entirely from the server to the client before it is returned to
+Python. If this is undesirable it's possible to use "server-side cursors", the
+ones created by the PostgreSQL CURSOR statement.
+
+Same interface, slightly different life cycle (cannot be reused)
 
 ----
 
@@ -395,12 +378,42 @@ there are dict-returning cursors too, and it's easy to write new ones
 ----
 
 
+Example: multiple cursors
+=========================
+
+.. code-block:: python
+
+    def work(cnn):
+        cur = cnn.cursor()
+        cur.execute(BIG_FAT_QUERY)
+        for r in cur:
+            if some_condition(r):
+                do_something(cnn, r)
+
+        cnn.commit()
+
+    def do_something(cnn, r):
+        cur = cnn.cursor()
+        cur.execute(SOME_QUERY, args(r))
+
+Presenter notes
+---------------
+
+Typical function pattern: get a connection as argument, do your job in a
+separate cursor and don't commit it: the function can be composed with other
+functions and a single super-function can be responsible of committing. Any
+error in any function would roll-back all everything in the connection's
+transaction.
+
+----
+
+
 Connections and transactions
 ============================
 
 1. "the transaction belongs to the connection"
 
-2. "every statement must begin a transaction"
+2. "every statement must begin a transaction" (per DBAPI)
 
 3. trouble::
 
@@ -420,13 +433,15 @@ a tricky problem.
 Connections and transactions
 ============================
 
-Psycopg antipattern: run a query and forget about it
+- Psycopg antipattern: run a query and forget about it
 
-.. code-block:: python
+  .. code-block:: python
 
     cnn = psycopg2.connect(DSN)
     cur = cnn.cursor()
     cur.execute("select now()")
+
+- A transaction has now started and nobody cares to terminate it
 
 Presenter notes
 ---------------
@@ -725,12 +740,6 @@ Presenter notes
 Async notification
 ==================
 
-Using gevent__, gevent-websocket__, psycogreen__
-
-.. __: http://www.gevent.org/
-.. __: http://www.gelens.org/code/gevent-websocket/
-.. __: https://bitbucket.org/dvarrazzo/psycogreen/
-
 .. code-block:: python
 
     def dblisten():
@@ -742,8 +751,7 @@ Using gevent__, gevent-websocket__, psycogreen__
         cur.close()
 
         while 1:
-            # gevent's cooperative yield on I/O block
-            wait_read(conn.fileno(), timeout=None)
+            wait_read(conn.fileno())    # cooperative select()
             conn.poll()
             while conn.notifies:
                 n = conn.notifies.pop()
@@ -753,6 +761,12 @@ Using gevent__, gevent-websocket__, psycogreen__
 
 Async notification demo
 =======================
+
+Using gevent__, gevent-websocket__, psycogreen__
+
+.. __: http://www.gevent.org/
+.. __: http://www.gelens.org/code/gevent-websocket/
+.. __: https://bitbucket.org/dvarrazzo/psycogreen/
 
 .. class:: apology
 
