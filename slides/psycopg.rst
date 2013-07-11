@@ -1,8 +1,13 @@
-====================================
-Psycopg: Python for PostgreSQL users
-====================================
+======================================
+*Psycopg*: Python for PostgreSQL users
+======================================
 
 .. image:: img/psycopg.png
+
+
+.. class:: text-right
+
+    © 2013, Daniele Varrazzo
 
 ----
 
@@ -99,8 +104,8 @@ longer).
 ----
 
 
-Psycopg: it gets out of the way
-===============================
+Psycopg: *it gets out of the way*
+=================================
 
 - Read Python objects from SQL queries
 - Write Postgres types as query parameters
@@ -158,7 +163,7 @@ What is ``psycopg2`` made of?
 
   (good for CPython - 95% of users (stat just made up))
 
-- A `pure Python implementation`__ exists
+- A `pure Python implementation`__ using FFI exists
 
   (for CPython, PyPy. Maybe Jython, IronPython too?)
 
@@ -232,7 +237,7 @@ Example: basic usage
     >>> cur.execute("INSERT INTO test (num, data) VALUES (%s, %s)",
     ...      (100, "abc'def"))
 
-    >>> cur.execute("SELECT * FROM test;")
+    >>> cur.execute("SELECT * FROM test")
     >>> cur.fetchone()
     (1, 100, "abc'def")
 
@@ -387,8 +392,7 @@ Example: multiple cursors
         cur = cnn.cursor()
         cur.execute(BIG_FAT_QUERY)
         for r in cur:
-            if some_condition(r):
-                do_something(cnn, r)
+            do_something(cnn, r)
 
         cnn.commit()
 
@@ -411,7 +415,7 @@ transaction.
 Connections and transactions
 ============================
 
-1. "the transaction belongs to the connection"
+1. "the transaction belongs to the ``connection``"
 
 2. "every statement must begin a transaction" (per DBAPI)
 
@@ -506,13 +510,17 @@ Talking to PG:
 .. code-block:: python
 
     def get_articles_before(d):
-        d = datetime.strptime(d, '%Y-%m-%d')
+        d = datetime.strptime(d, '%d/%m/%Y')
         cur.execute("""
             select title, date, body from article
-            where date < %s order by date desc, id desc limit 10""",
+            where date < %s
+            order by date desc, id desc
+            limit 10""",
             [d])
 
-Psycopg takes care of converting a Python date to PostgreSQL syntax.
+- Python converts from boundary syntax to object
+
+- Psycopg converts the Python object to PostgreSQL syntax
 
 Presenter notes
 ---------------
@@ -622,13 +630,13 @@ More Data!
             '1 day'::interval) s(d)""")
     # [datetime.date(2013, 7, 11), datetime.date(2013, 7, 12)]
 
-- [named] ``tuple`` <-> composite
+- [``named``] ``tuple`` <-> composite
 
   .. code-block:: python
 
-    >>> cur.execute("CREATE TYPE card AS (value int, suit text);")
+    >>> cur.execute("CREATE TYPE card AS (value int, suit text)")
     >>> psycopg2.extras.register_composite('card', cur)
-    >>> cur.execute("select (8, 'hearts')::card_back")
+    >>> cur.execute("select (8, 'hearts')::card")
     # card(value=8, suit='hearts')
 
 - ``dict`` of ``str`` <-> ``hstore``
@@ -636,7 +644,7 @@ More Data!
   .. code-block:: python
 
     >>> psycopg2.extras.register_hstore(cur)
-    >>> cur.execute("select 'a => foo, b => NULL'::hstore;")
+    >>> cur.execute("select 'a => foo, b => NULL'::hstore")
     # {'a': 'foo', 'b': None}
 
 ----
@@ -687,7 +695,7 @@ Adaptation
 
     # usage
     elem = ET.fromstring("<doc>Hello, 'xml'!</doc>")
-    cur.execute("INSERT INTO xmltest (xmldata) VALUES (%s);", [elem])
+    cur.execute("INSERT INTO xmltest (xmldata) VALUES (%s)", [elem])
 
 Presenter notes
 ---------------
@@ -718,7 +726,7 @@ Typecasting
     register_type(XML)
 
     # usage
-    cur.execute("SELECT xmldata FROM xmltest;")
+    cur.execute("SELECT xmldata FROM xmltest")
     elem = cur.fetchone()[0]
     print elem.text     # Hello, 'xml'!
 
@@ -828,7 +836,8 @@ The future
 
 - Optional in Psycopg 2.(*n*\+1), default in ``psycopg3``
 
-  - ``psycopg3`` would be a ``psycopg2`` wrapper with modern defauls
+  - ``psycopg3`` would be a ``psycopg2`` wrapper with modern defauls (e.g.
+    Unicode everywhere)
 
 - Sponsorship required
 

@@ -14,3 +14,7 @@ table.data-types td {
 table.data-types th {
   padding: 0.15em;
 }
+
+.text-right {
+    text-align: right;
+}
