@@ -809,6 +809,10 @@ Using gevent__, gevent-websocket__, psycogreen__
     <p id="blue" class="bar" style="background-color: blue;">&nbsp;</p>
     <p id="target"></p>
 
+.. class:: text-right
+
+    Demo code at https://github.com/dvarrazzo/psycopg-pgdayuk-2013
+
 ----
 
 
