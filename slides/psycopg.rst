@@ -540,7 +540,7 @@ Pro Tip #2: security is a mindset
 
 You can write crappy code with Psycopg too, but it takes effort
 
-- **Q.** how to write safe code with **BAD**?
+- **Q.** how to write safe code with **$BAD_DRIVER**?
 - **A.** remember to wrap every parameter through some ``sanitize()`` function
 
 - **Q.** how to write *unsafe* code with Psycopg?
