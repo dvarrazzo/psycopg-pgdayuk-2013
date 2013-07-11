@@ -810,6 +810,31 @@ Async notification demo (offline)
 
 ----
 
+
+The future
+==========
+
+- Use ``libpq`` params
+
+  - (yes, yes... but not backward compatible)
+
+- Content (not quoted) adaptation
+
+  - Improvements to ``COPY``, ``hstore``...
+
+- Binary protocol
+
+- Optional in Psycopg 2.(*n*\+1), default in ``psycopg3``
+
+  - ``psycopg3`` would be a ``psycopg2`` wrapper with modern defauls
+
+- Sponsorship required
+
+  - Kickstarter project?
+
+
+----
+
 Thank you!
 ==========
 
