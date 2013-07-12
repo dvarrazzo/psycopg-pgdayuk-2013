@@ -475,9 +475,8 @@ Pro Tip #1: Idle in transaction
         with psycopg2.connect(DSN) as cnn:
             with cnn.cursor() as cur:
                 do_someting(cur)
-
-            with cnn.cursor() as another_cur:
-                do_somethingelse(another_cur)
+            # here 'cur' is closed
+        # here 'cnn' is committed/rolled back
 
         with cnn:
             keep_on_using(cnn)
@@ -511,13 +510,10 @@ Talking to PG:
 
 .. code-block:: python
 
-    def get_articles_before(d):
+    def get_by_birthday(d):
         d = datetime.strptime(d, '%d/%m/%Y')
-        cur.execute("""
-            select title, date, body from article
-            where date < %s
-            order by date desc, id desc
-            limit 10""",
+        cur.execute(
+            "select name from friends where birth_date = %s",
             [d])
 
 - Python converts from boundary syntax to object
