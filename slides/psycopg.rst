@@ -45,7 +45,7 @@ said this way, in uppercase.
 Python in the 10's
 ==================
 
-- Software development: PHP -> Python
+- Web development: PHP -> Python
 
   (path similar to MySQL -> PostgreSQL)
 
