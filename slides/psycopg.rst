@@ -7,7 +7,9 @@
 
 .. class:: text-right
 
-    © 2013, Daniele Varrazzo
+    PGDay UK 2013
+
+    Daniele Varrazzo
 
 ----
 
@@ -664,6 +666,9 @@ From Psycopg 2.5
     >>> r.upper_inc, r.lower_inc
     (False, True)
 
+  - Builtin range types supported out-of-the-box
+  - New range type supported by ``psycopg2.extras.register_range()``
+
 - Anything™ <-> ``json``
 
   .. code-block:: python
@@ -834,7 +839,7 @@ The future
 
 - Content (not quoted) adaptation
 
-  - Improvements to ``COPY``, ``hstore``...
+  - Would also improve ``COPY``, ``hstore``...
 
 - Binary protocol, prepared statements...
 
@@ -844,10 +849,13 @@ The future
 Update path
 ===========
 
-- Optional in Psycopg 2.(*n*\+1), default in ``psycopg3``
+- New adaptation protocol
 
-- ``psycopg3`` would be a ``psycopg2`` wrapper with modern defauls (e.g.
-  Unicode everywhere)
+  - Optional in Psycopg 2.(*n*\+1), default in ``psycopg3``
+
+- ``psycopg3`` would be a ``psycopg2`` wrapper with modern defaults
+
+  - Es. Unicode everywhere by default
 
 - Sponsorship required
 
