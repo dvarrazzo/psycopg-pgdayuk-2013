@@ -863,11 +863,7 @@ Update path
 Thank you!
 ==========
 
+See you at http://initd.org/psycopg\!
 
-----
-
-Questions?
-==========
-
-
+.. image:: img/psycopg.png
 
