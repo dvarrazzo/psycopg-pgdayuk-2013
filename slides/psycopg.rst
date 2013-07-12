@@ -559,7 +559,7 @@ You can write crappy code with Psycopg too, but it takes effort
 Presenter notes
 ---------------
 
-What to do if your developer writes code in the second style? Don't shout at
+What to do if your developer writes code in the first style? Don't shout at
 him, don't break his heart: he has only one. Break him a bone: he's got 206.
 
 Bottom line: psycopg makes hard to mess up with security. It's still possible
@@ -739,13 +739,13 @@ Typecasting
 Presenter notes
 ---------------
 
-    The mapping is oid, string -> typecaster(string) -> Python type.
+The mapping is oid, string -> typecaster(string) -> Python type.
 
-    - create a typecaster object with a function taking a string
-    - bind the typecaster to one or more oid
-    - profit
+- create a typecaster object with a function taking a string
+- bind the typecaster to one or more oid
+- profit
 
-    example: xml
+example: xml
 
 
 ----
